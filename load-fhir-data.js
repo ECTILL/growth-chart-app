@@ -31,7 +31,10 @@ GC.get_data = function() {
     };
 
     var ptFetch = smart.patient.read();
-    var vitalsFetch = smart.patient.api.fetchAll({type: "Observation", query: {code: {$or: ['3141-9', '8302-2', '8287-5', '39156-5', '18185-9', '37362-1', '11884-4']}}});
+    var vitalsFetch = smart.patient.api.fetchAll({type: "Observation", query: {code: {$or:  ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
+                              'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
+                              'http://loinc.org|2089-1', 'http://loinc.org|55284-4']}}});
+    // var vitalsFetch = smart.patient.api.fetchAll({type: "Observation", query: {code: {$or: ['3141-9', '8302-2', '8287-5', '39156-5', '18185-9', '37362-1', '11884-4']}}});
     var familyHistoryFetch = defaultOnFail(smart.patient.api.fetchAll({type: "FamilyMemberHistory"}), []);
 
     $.when(ptFetch, vitalsFetch, familyHistoryFetch).done(onData);
@@ -81,9 +84,9 @@ GC.get_data = function() {
         gestAge = vitalsByCode['11884-4'];
       }
       if (gestAge && gestAge.length > 0) {
-        var weeks = 0, qty = gestAge[0].valueString ? 
+        var weeks = 0, qty = gestAge[0].valueString ?
           gestAge[0].valueString.value || '40W 0D' :
-          gestAge[0].valueQuantity ? 
+          gestAge[0].valueQuantity ?
             gestAge[0].valueQuantity.value || 40 :
             40;
 

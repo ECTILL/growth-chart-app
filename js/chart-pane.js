@@ -818,7 +818,7 @@ ChartPane.prototype = {
 
         this.__CACHE__ = {};
         this.paper.clear();
-        this.width  = this.container.clientWidth;
+        this.width  = this.container.clientWidth - 200;
         this.height = this.container.clientHeight;
         this.drawAnnotations();
         this.drawTimelines();
@@ -894,7 +894,7 @@ ChartPane.prototype = {
             chart.isInLastRow = rowIndex === rowsLen - 1;
             chart.colIndex = colIndex;
             chart.rowIndex = rowIndex;
-            chart.setWidth(inst.getColumnWidth(colIndex) - s.leftgutter - s.rightgutter -200)
+            chart.setWidth(inst.getColumnWidth(colIndex) - s.leftgutter - s.rightgutter)
                  .setHeight(rowHeight)
                  .setX(inst.getColumnLeft(colIndex) + s.leftgutter)
                  .setY(y)

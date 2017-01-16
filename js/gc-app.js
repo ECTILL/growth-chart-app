@@ -1472,7 +1472,7 @@
         setStageHeight();
         NS.Util.translateHTML();
 
-        // QUEUE.add(NS.str("STR_LoadingCurveData"),loadDataSets);
+        QUEUE.add(NS.str("STR_LoadingCurveData"),loadDataSets);
 
         QUEUE.add(NS.str("STR_LoadingData"), loadData);
 

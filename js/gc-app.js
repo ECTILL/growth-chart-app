@@ -1,6 +1,6 @@
 /*global Chart, GC, PointSet, Raphael, XDate, console,
  Raphael*/
-/*jslint eqeq: true, nomen: true, plusplus: true, newcap: true */ 
+/*jslint eqeq: true, nomen: true, plusplus: true, newcap: true */
 
 
 (function(NS, $) {
@@ -9,23 +9,23 @@
 
     NS.App = {};
 
-    var DEBUG_MODE = NS.chartSettings.appEnvironment === "DEVELOPMENT", 
-        leftPane = null, 
-        parentalDarwn = false, 
-        drawn = false, 
-        PATIENT = null, 
-        BIRTH_XDATE = new XDate(), 
-        MIN_WEEK_DIFF = NS.chartSettings.minTimeInterval / NS.Constants.TIME.WEEK, 
-        BROADCASTER = $("html"), 
+    var DEBUG_MODE = NS.chartSettings.appEnvironment === "DEVELOPMENT",
+        leftPane = null,
+        parentalDarwn = false,
+        drawn = false,
+        PATIENT = null,
+        BIRTH_XDATE = new XDate(),
+        MIN_WEEK_DIFF = NS.chartSettings.minTimeInterval / NS.Constants.TIME.WEEK,
+        BROADCASTER = $("html"),
         PRIMARY_CHART_TYPE = "CDC",
         CORRECTION_CHART_TYPE = "CDC", // CDC, WHO etc.
-        START_WEEK = 0, 
-        END_WEEK = 26.08928571428572, 
-        START_AGE_MOS = null, 
-        END_AGE_MOS = null, 
-        GENDER = null, 
-        RENDER_FOR_PRINT = $("html").is(".before-print"), 
-        PRINT_WINDOW = null, 
+        START_WEEK = 0,
+        END_WEEK = 26.08928571428572,
+        START_AGE_MOS = null,
+        END_AGE_MOS = null,
+        GENDER = null,
+        RENDER_FOR_PRINT = $("html").is(".before-print"),
+        PRINT_WINDOW = null,
         ANNOTATIONS_WINDOW = null,
         imagesToPreload = [
             "img/pview/HeadCircumferenceIcon.png",
@@ -48,8 +48,8 @@
             //"img/pview/pinkMotherHeightImage.png",
             //"img/pview/pinkTeenHeightImage.png",
             //"img/pview/pinkToddlerHeightImage.png"
-        ], 
-        
+        ],
+
         getStartAgeMos,
         getEndAgeMos;
 
@@ -58,7 +58,7 @@
             console.log(a);
         }
     };
-    
+
     // gender ------------------------------------------------------------------
     function getGender() {
         if (!GENDER) {
@@ -213,8 +213,8 @@
             var values = this.value.split(":"),
                 start  = GC.Util.floatVal(values[0]),
                 end    = GC.Util.floatVal(values[1]);
-            
-            // If the given age is within this time range 
+
+            // If the given age is within this time range
             if (start <= weeks && end >= weeks) {
                 setStartWeek(start, true);
                 setEndWeek(end);
@@ -225,11 +225,11 @@
     }
 
     function getFitRange() {
-        var first = PATIENT.getFirstModelEntry(), 
-            last = PATIENT.getLastModelEntry(), 
-            step, 
+        var first = PATIENT.getFirstModelEntry(),
+            last = PATIENT.getLastModelEntry(),
+            step,
             firstAge,
-            lastAge, 
+            lastAge,
             range;
 
         if (!first || !last) {
@@ -306,7 +306,7 @@
 
         drawn = true;
     }
-    
+
     function togglePatientEditable(bEditable) {
         $('[name="fader-height"]').stepInput( bEditable ? "enable" : "disable");
         $('[name="mother-height"]').stepInput( bEditable ? "enable" : "disable");
@@ -316,7 +316,7 @@
         $('[name="EDD"]').datepicker( bEditable ? "enable" : "disable");
         //$(".add-entry").toggleClass("ui-state-disabled", !bEditable);
     }
-    
+
     function togglePatientDataEditable(bEditable) {
         $(".add-entry").toggleClass("ui-state-disabled", !bEditable);
     }
@@ -362,13 +362,13 @@
         $("html").attr("lang", lang).trigger("set:language", [lang]);
         return this;
     };
-    
-    
+
+
     NS.Util.createProperty(NS.App, {
         name : "correctionAge",
         inputName : "correction-age"
     });
-    
+
     NS.Util.createProperty(NS.App, {
         name : "viewType",
         getter : function() {
@@ -393,13 +393,13 @@
         $("#dialog")
         .empty()
         .html(
-            '<div class="content">' + 
-            '<p style="text-align:center">' + 
-            '<img src="img/spinner.gif" />' + 
-            '<br />' + 
-            '<br />' + 
-            NS.str("STR_Loading") + 
-            '</p>' + 
+            '<div class="content">' +
+            '<p style="text-align:center">' +
+            '<img src="img/spinner.gif" />' +
+            '<br />' +
+            '<br />' +
+            NS.str("STR_Loading") +
+            '</p>' +
             '</div>'
         )
         .data("dialogProxy", {
@@ -412,7 +412,7 @@
             title : NS.str("STR_Loading"),
             position : "center"
         }, options)).dialog("open");
-        
+
         setTimeout(function() {
             $("#dialog").find("> .content").load(url, function() {
                 NS.Util.translateHTML(this);
@@ -448,7 +448,7 @@
             "width" : "auto"
         });
     };
-    
+
     NS.App.aboutAppDialog = function() {
         GC.App.dialog("about-dialog.html", null, {
             "modal" : false,
@@ -457,7 +457,7 @@
             "width" : "auto"
         });
     };
-    
+
     NS.App.viewAnnotations = function() {
         if (ANNOTATIONS_WINDOW === null || ANNOTATIONS_WINDOW.closed) {
             ANNOTATIONS_WINDOW = window.open("annotations.html", "annotationsWindow", "resizable=yes,scrollbars=yes,centerscreen=yes,status=yes,width=800,height=600,dependent=yes,dialog=yes");
@@ -549,7 +549,7 @@
             case GC.DataType.STRING:
                 out = String(x);
                 break;
-                
+
             default:
                 throw "Undefined data type";
         }
@@ -625,14 +625,14 @@
         };
 
     }());
-    
+
     // =========================================================================
     // End of selection methods
     // =========================================================================
 
     $(function initUI() {
 
-        var stage = $("#stage"), 
+        var stage = $("#stage"),
             QUEUE = new GC.Util.TaskQueue({
                 onChange : function(task) {
                     $("#loading-indicator .msg").text(task.description);
@@ -643,27 +643,27 @@
                     });
                 }
             });
-        
+
         function createLanguageSelectors() {
-            var len = 0, 
+            var len = 0,
                 enabledLocales = [],
                 cur = GC.App.getLanguage();
-            
+
             $.each(GC.locales, function(i, locale) {
                 if (locale.enabled) {
                     enabledLocales[len++] = locale;
                 }
             });
-            
+
             $(".language-selector").each(function(i, o) {
                 $(o).empty();
-                
-                
+
+
                 // Display the 2 languages as toggle-button
                 if (len == 2) {
                     var input = $('<input class="toggle-button" type="hidden" name="language" />').attr({
-                        "value" : cur, 
-                        "data-value1" : enabledLocales[0].langAbbr, 
+                        "value" : cur,
+                        "data-value1" : enabledLocales[0].langAbbr,
                         "data-value2" : enabledLocales[1].langAbbr,
                         "data-label1" : enabledLocales[0].language,
                         "data-label2" : enabledLocales[1].language
@@ -671,8 +671,8 @@
                         GC.App.setLanguage($(this).val());
                     }).appendTo(o);
                     $.createToggleButton(input);
-                } 
-                
+                }
+
                 // Display the one or more than two languages as select
                 else {
                     var html = '<select name="language" class="styled language-select">';
@@ -680,7 +680,7 @@
                         html += '<option value="' + locale.langAbbr + '">' + locale.language + '</option>';
                     });
                     html += '</select>';
-                    
+
                     $(o)
                         .append('<span data-translatecontent="STR_0">' + GC.str("STR_0") + '</span>: ')
                         .append(
@@ -690,7 +690,7 @@
                         );
                 }
             });
-            
+
             $("html").bind("set:language", function(e, lang) {
                 $(".language-selector select").val(lang);
                 NS.Util.translateHTML();
@@ -797,7 +797,7 @@
 
         function loadData(done) {
 
-            var SMART_NS = "http://smarthealthit.org/terms#", 
+            var SMART_NS = "http://smarthealthit.org/terms#",
               capabilities = {
                 preferences : {
                   read  : false,
@@ -826,11 +826,11 @@
             GC.get_data().done(
             function(data) {
               GC.currentPatient = PATIENT = new GC.Patient(
-                data.demographics, 
-                data.vitals, 
-                null, //allergies, 
+                data.demographics,
+                data.vitals,
+                null, //allergies,
                 data.familyHistory,
-                null,//	annotations, 
+                null,//	annotations,
                 data.boneAge
               );
               GC.translatePreemieDatasets(PATIENT);
@@ -838,7 +838,7 @@
             }).fail(function(response){
               var msg = response.responseText;
               console.log("Failed.");
-              $("#loading-indicator h2").html(msg); 
+              $("#loading-indicator h2").html(msg);
               if (response.status === 404) {
                 $("#loading-indicator h2").append($("<button>Make me a fake one!</button>"));
                 $("#loading-indicator button").click(function(){
@@ -851,9 +851,9 @@
         }
 
         function initUIControls(done) {
-            
+
             createLanguageSelectors();
-            
+
             // Choose view type
             // =================================================================
 
@@ -892,15 +892,15 @@
             // Time range tabs and Zoom In
             // =================================================================
             (function() {
-                
+
                 function updateTabRadioState() {
                     $(this).closest('label').toggleClass("active", this.checked);
                 }
-                
+
                 function onTimeRangeTabChange() {
                     $(this).closest("#time-ranges").find("input").each(updateTabRadioState);
                 }
-                
+
                 var selectedTab;
 
                 var fitRange = GC.App.getFitRange();
@@ -951,7 +951,7 @@
                 });
 
             }());
-            
+
 
             // Toggle settings button
             // =================================================================
@@ -980,7 +980,7 @@
                         "Leave only the left data source as primary" :
                         "Add secondary data source"
                 );
-                
+
                 $("html").toggleClass("premature", !!isDSPremature);
             }
 
@@ -1060,29 +1060,29 @@
                     startAge = 0,
                     endAge   = 20,
                     gender;
-                    
+
                 if (patient) {
                     startAge = 0;//GC.App.getStartAgeMos();
                     endAge   = 20 * 12; //GC.App.getStartAgeMos();
                     gender   = GC.App.getGender();
-                    
+
                     if (GC.getDataSet(src, "LENGTH", gender, startAge, endAge) ||
                         GC.getDataSet(src, "WEIGHT", gender, startAge, endAge) ||
                         GC.getDataSet(src, "HEADC" , gender, startAge, endAge) ||
                         GC.getDataSet(src, "BMI"   , gender, startAge, endAge)) {
-                        return true;    
+                        return true;
                     }
                 }
-                return false; 
+                return false;
             }
-            
+
             $("#primary-ds, #secondary-ds").menuButton("forEachOption", function(o) {
                 this.setIndexEnabled(o.index, hasData(o.value));
             });
             // =============================================================
-            
-            
-            
+
+
+
 
             // checkbox-button
             // =================================================================
@@ -1107,7 +1107,7 @@
                     );
                 }
             });
-            
+
             // Uncomment the following if [name="gest-correction-treshold"] should be initialy disabled on FENTON
             //onDataSetsChange();
 
@@ -1184,7 +1184,7 @@
                 renderMidParentalHeight();
                 $("#not-bio-parents-info")[!PATIENT.midParentalHeight ? "show" : "hide"]();
             });
-            
+
             // PATIENT inputs
             // =================================================================
 
@@ -1345,18 +1345,18 @@
 
         function showLastRecOrSelection() {
 
-            var lastRec = PATIENT.getLastModelEntry(), 
-                rec = GC.SELECTION.selected.record || lastRec, 
-                date, 
+            var lastRec = PATIENT.getLastModelEntry(),
+                rec = GC.SELECTION.selected.record || lastRec,
+                date,
                 age;
 
             if (!rec) {
                 $(".last-recording").hide();
                 return;
             }
-            
+
             date = (new XDate(PATIENT.DOB)).addMonths(rec.agemos);
-            
+
             age = new GC.TimeInterval(PATIENT.DOB, date);
 
             $(".last-recording").show().find("> span").html(
@@ -1373,7 +1373,7 @@
         }
 
         function setUIValues(done) {
-            
+
             // fontFamily
             GC.Preferences.bind("set:fontFamily", function(e) {
                 $("body").css("fontFamily", e.data.newValue);
@@ -1386,15 +1386,15 @@
                 setStageHeight();
             });
             $("body").css("fontSize", GC.chartSettings.fontSize);
-            
+
             // Display app version
             $(".version").text(GC.chartSettings.version.asString());
 
             GC.Preferences.bind("set:dateFormat", showLastRecOrSelection);
-            
+
             togglePatientEditable(GC.chartSettings.patientFamilyHistoryEditable);
             togglePatientDataEditable(GC._isPatientDataEditable);
-            
+
             done();
         }
 
@@ -1472,10 +1472,10 @@
         setStageHeight();
         NS.Util.translateHTML();
 
-        QUEUE.add(NS.str("STR_LoadingCurveData"),loadDataSets);
+        // QUEUE.add(NS.str("STR_LoadingCurveData"),loadDataSets);
 
         QUEUE.add(NS.str("STR_LoadingData"), loadData);
-        
+
         QUEUE.add(NS.str("STR_PreloadImages"), function(done) {
             $.each(imagesToPreload, function(i, src) {
                 var img = new Image();
@@ -1483,7 +1483,7 @@
             });
             done();
         });
-        
+
         QUEUE
             .add(NS.str("STR_SetInitialState"), setInitialState)
             .add(NS.str("STR_InitializeUIControls"), initUIControls)
@@ -1496,10 +1496,10 @@
             .add(NS.str("STR_AllDone"), function(done) {
                 done();
             });
-        
+
         QUEUE.start();
     });
 
     return NS;
 
-}(GC, jQuery)); 
+}(GC, jQuery));

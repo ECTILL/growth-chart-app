@@ -818,7 +818,7 @@ ChartPane.prototype = {
 
         this.__CACHE__ = {};
         this.paper.clear();
-        this.width  = this.container.clientWidth - 200;
+        this.width  = this.container.clientWidth;
         this.height = this.container.clientHeight;
         this.drawAnnotations();
         this.drawTimelines();
